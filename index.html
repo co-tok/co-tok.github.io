@@ -38,10 +38,19 @@
         <div class="column has-text-centered">
           <h1 class="title is-1 publication-title">Compute Optimal Tokenization</h1>
           <div class="is-size-5 publication-authors">
-            <!-- <span class="author-block"><a href="URL">Author Name</a><sup>1</sup>,</span> -->
+            <span class="author-block"><a href="https://scholar.google.com/citations?user=RqxyTsgAAAAJ">Tomasz Limisiewicz</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?user=oLXBw0YAAAAJ">Artidoro Pagnoni</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?user=jNjde2wAAAAJ">Srini Iyer</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?user=SnQnQicAAAAJ">Mike Lewis</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?user=cnRJ0GUAAAAJ">Sachin Mehta</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?user=3-lTFAwAAAAJ">Alisa Liu</a><sup>2</sup>,</span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?user=cUSS3fYAAAAJ">Margaret Li</a><sup>2</sup>,</span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?user=k5akwCcAAAAJ">Gargi Ghosh</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?user=UjpbO6IAAAAJ">Luke Zettlemoyer</a><sup>1</sup></span>
           </div>
           <div class="is-size-5 publication-authors">
-            <!-- <span class="author-block"><sup>1</sup>Affiliation</span> -->
+            <span class="author-block"><sup>1</sup>FAIR at Meta,</span>
+            <span class="author-block"><sup>2</sup>University of Washington</span>
           </div>
         </div>
       </div>
@@ -81,7 +90,11 @@
     <div class="columns is-centered has-text-justified">
       <div class="column is-four-fifths">
         <div class="content is-size-5">
-          <em><strong>TL;DR:</strong> YOUR SUMMARY HERE</em>
+          <em><strong>TL;DR:</strong>
+          We study the impact of data compression on scaling laws. We find that:<br>
+          a) Number of bytes of data (not tokens) should be proportional to parameter count.<br>
+          b) Optimal domain-specific compression is crucial for model performance at scale.
+          </em>
         </div>
       </div>
     </div>
@@ -98,55 +111,68 @@
         <div class="content">
 
           <!-- ── Section heading ──────────────────────── -->
-          <h4>Section Title</h4>
+          <h4>Scaling Laws and Data Compression</h4>
 
           <!-- ── Paragraph ────────────────────────────── -->
-          <p>Your text. Inline math: $x^2$.</p>
-
-          <!-- ── Display equation ─────────────────────── -->
-          <div class="equation-block">
-            $$E = mc^2$$
-          </div>
+          <p>We train language models for fixed compute budgets, sweeping over compression rate, data amount, and parameter count.
+            For each configuration, we compute the number of bytes per parameter and plot its loss.</p>
 
           <!-- ── Single image ─────────────────────────── -->
           <div class="is-flex is-horizontal-center">
             <figure class="image">
-              <img src="static/images/FILENAME.png" alt="description">
-              <figcaption>Caption.</figcaption>
+              <img src="static/images/blt_entropy_1e20_results_global_parameters_gradual.gif" alt="IsoFLOP curves showing bytes per parameter vs validation loss">
+              <figcaption>Bytes per parameter against validation loss at a fixed compute budget.</figcaption>
             </figure>
           </div>
 
-          <!-- ── Side-by-side images ──────────────────── -->
+
+          <!-- ── Section heading ──────────────────────── -->
+          <h4>Optimal Data to Model Size</h4>
+
+          <!-- ── Paragraph ────────────────────────────── -->
+          <p>The optimal ratio between bytes of data and model parameters is close to constant across variable compute budgets and compression rates.
+            Therefore, when generalizing a scaling recipe to a model with a different tokenizer, we advise matching the ratio of training bytes (not tokens) to model parameters.</p>
+
+          <!-- ── Single image ─────────────────────────── -->
           <div class="is-flex is-horizontal-center">
             <figure class="image">
-              <div class="side-by-side">
-                <img src="static/images/LEFT.png" alt="left">
-                <img src="static/images/RIGHT.png" alt="right">
-              </div>
-              <figcaption>Caption.</figcaption>
+              <img src="static/images/blt_entropy_1e20_results_compression_3d.gif" alt="3D IsoFLOP surface showing optimal bytes per parameter ratio">
+              <figcaption>Bowl-shaped IsoFLOP surface shows that the lowest loss for each compression rate is achieved at the same bytes-per-parameter ratio.</figcaption>
             </figure>
           </div>
 
+
           <!-- ── Interactive Plotly embed ──────────────── -->
-          <iframe class="interactive-frame" src="static/images/INTERACTIVE.html" loading="lazy"></iframe>
+          <iframe class="interactive-frame" src="static/images/blt_entropy_1e20_results_compression_3d.html" loading="lazy"></iframe>
 
-          <!-- ── Key finding callout ──────────────────── -->
-          <div class="finding-box">
-            <div class="label-text">Key Finding</div>
-            <p>Your finding here.</p>
-          </div>
 
-          <!-- ── Table ────────────────────────────────── -->
+          <!-- ── Section heading ──────────────────────── -->
+          <h4>Optimal Compression Rate</h4>
+
+          <!-- ── Paragraph ────────────────────────────── -->
+          <p>The model's loss is minimized at optimal compression rate. Diverging from its value in either direction increases loss.
+            We observe a small decrease of optimal compression rate for higher training budgets.</p>
+
+          <!-- ── Single image ─────────────────────────── -->
           <div class="is-flex is-horizontal-center">
-            <table class="table is-hoverable" id="scalingtab">
-              <thead>
-                <tr><th>Col 1</th><th>Col 2</th><th>Col 3</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>Label</td><td>0.123</td><td>0.456</td></tr>
-              </tbody>
-            </table>
+            <figure class="image">
+              <img src="static/images/blt_entropy_optimal_configs_loss.gif" alt="Loss profile across compression rates for increasing compute budgets">
+              <figcaption>Slide-shaped loss profile for increasing compute budgets. For best results, models should be trained with a compression rate close to the center of the slide.</figcaption>
+            </figure>
           </div>
+
+
+          <!-- ── Interactive Plotly embed ──────────────── -->
+          <iframe class="interactive-frame" src="static/images/blt_entropy_optimal_configs_loss.html" loading="lazy"></iframe>
+
+
+
+          <!-- ── Section heading ──────────────────────── -->
+          <h4>Beyond English [TODO] </h4>
+
+          <!-- ── Paragraph ────────────────────────────── -->
+          <p>The optimal bytes-to-parameter ratio and compression rate vary across different languages.
+            Both are correlated with the average information value of bytes in a given language (measured by entropy).</p>
 
         </div>
       </div>
@@ -162,9 +188,9 @@
       <div class="column is-four-fifths">
         <div class="content">
           <h2 class="title">BibTeX</h2>
-          <pre><code>@article{yourkey,
-  title={Your Title},
-  author={Authors},
+          <pre><code>@article{limisiewicz2026compute,
+  title={Compute Optimal Tokenization},
+  author={Limisiewicz, Tomasz and Pagnoni, Artidoro and Iyer, Srini and Lewis, Mike and Mehta, Sachin and Liu, Alisa and Li, Margaret and Ghosh, Gargi and Zettlemoyer, Luke},
   year={2026}
 }</code></pre>
         </div>
