@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Compute Optimal Tokenization: Scaling Laws for Data Compression in Language Models">
+  <meta name="keywords" content="scaling laws tokenization compression BLT byte latent transformer">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Compute Optimal Tokenization</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.png">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+      onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+</head>
+<body>
+
+<!-- ─── HEADER ──────────────────────────────────────────── -->
+<!-- Edit: title, authors, affiliations, links                -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Compute Optimal Tokenization</h1>
+          <div class="is-size-5 publication-authors">
+            <!-- <span class="author-block"><a href="URL">Author Name</a><sup>1</sup>,</span> -->
+          </div>
+          <div class="is-size-5 publication-authors">
+            <!-- <span class="author-block"><sup>1</sup>Affiliation</span> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <div class="publication-links">
+            <!-- <span class="link-block">
+              <a href="#" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                <span>Paper</span>
+              </a>
+            </span> -->
+            <!-- <span class="link-block">
+              <a href="#" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="ai ai-arxiv"></i></span>
+                <span>arXiv</span>
+              </a>
+            </span> -->
+            <!-- <span class="link-block">
+              <a href="#" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fab fa-github"></i></span>
+                <span>Code</span>
+              </a>
+            </span> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TL;DR ───────────────────────────────────────────── -->
+<!-- Edit: one-paragraph summary                              -->
+<section class="section" id="tldr">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-justified">
+      <div class="column is-four-fifths">
+        <div class="content is-size-5">
+          <em><strong>TL;DR:</strong> YOUR SUMMARY HERE</em>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTENT ─────────────────────────────────────────── -->
+<!-- Copy this section block for each section of content.      -->
+<!-- Available components shown below.                         -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-justified">
+      <div class="column is-four-fifths">
+        <div class="content">
+
+          <!-- ── Section heading ──────────────────────── -->
+          <h4>Section Title</h4>
+
+          <!-- ── Paragraph ────────────────────────────── -->
+          <p>Your text. Inline math: $x^2$.</p>
+
+          <!-- ── Display equation ─────────────────────── -->
+          <div class="equation-block">
+            $$E = mc^2$$
+          </div>
+
+          <!-- ── Single image ─────────────────────────── -->
+          <div class="is-flex is-horizontal-center">
+            <figure class="image">
+              <img src="static/images/FILENAME.png" alt="description">
+              <figcaption>Caption.</figcaption>
+            </figure>
+          </div>
+
+          <!-- ── Side-by-side images ──────────────────── -->
+          <div class="is-flex is-horizontal-center">
+            <figure class="image">
+              <div class="side-by-side">
+                <img src="static/images/LEFT.png" alt="left">
+                <img src="static/images/RIGHT.png" alt="right">
+              </div>
+              <figcaption>Caption.</figcaption>
+            </figure>
+          </div>
+
+          <!-- ── Interactive Plotly embed ──────────────── -->
+          <iframe class="interactive-frame" src="static/images/INTERACTIVE.html" loading="lazy"></iframe>
+
+          <!-- ── Key finding callout ──────────────────── -->
+          <div class="finding-box">
+            <div class="label-text">Key Finding</div>
+            <p>Your finding here.</p>
+          </div>
+
+          <!-- ── Table ────────────────────────────────── -->
+          <div class="is-flex is-horizontal-center">
+            <table class="table is-hoverable" id="scalingtab">
+              <thead>
+                <tr><th>Col 1</th><th>Col 2</th><th>Col 3</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Label</td><td>0.123</td><td>0.456</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── BIBTEX ──────────────────────────────────────────── -->
+<!-- Edit: citation info                                       -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content">
+          <h2 class="title">BibTeX</h2>
+          <pre><code>@article{yourkey,
+  title={Your Title},
+  author={Authors},
+  year={2026}
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ──────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This page was built using the <a href="https://github.com/superbpe/superbpe.github.io">SuperBPE project page</a> template, which is based on the <a href="https://advtok.github.io/">Adversarial Tokenization</a> and <a href="https://nerfies.github.io/">Nerfies</a> project pages.
+            This website is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
