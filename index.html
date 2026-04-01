@@ -94,8 +94,9 @@
         <div class="content is-size-5">
           <em><strong>TL;DR:</strong>
           We study the impact of data compression on scaling laws. We find that:<br>
-          a) Number of bytes of data (not tokens) should be proportional to parameter count.<br>
-          b) Optimal domain-specific compression is crucial for model performance at scale.
+          a) in compute optimal scaling: bytes (not tokens) of data increase proportionall to parameter count;
+          b) for each training budget the lowest loss is obtained at the optimal compression rate;
+          c) the optimal compression rate varies across languages and differs from compression of popular BPE tokenizers.
           </em>
         </div>
       </div>
@@ -122,6 +123,14 @@
           <!-- ── Single image ─────────────────────────── -->
           <div class="is-flex is-horizontal-center">
             <figure class="image">
+              <img src="static/images/blt_entropy_1e20_results_experimental_grid_global_parameters.png" alt="Grid of compression aware experiments">
+              <figcaption>Value of compression rate T (x-axis) and model size N (y-axis) determine the amount of training data B (color) and the bytes per parameter ratio (values in squares).</figcaption>
+            </figure>
+          </div>
+
+          <!-- ── Single image ─────────────────────────── -->
+          <div class="is-flex is-horizontal-center">
+            <figure class="image">
               <img src="static/images/blt_entropy_1e20_results_global_parameters_gradual.gif" alt="IsoFLOP curves showing bytes per parameter vs validation loss">
               <figcaption>Bytes per parameter against validation loss at a fixed compute budget.</figcaption>
             </figure>
@@ -138,14 +147,14 @@
           <!-- ── Single image ─────────────────────────── -->
           <div class="is-flex is-horizontal-center">
             <figure class="image">
-              <img src="static/images/blt_entropy_1e20_results_compression_3d.gif" alt="3D IsoFLOP surface showing optimal bytes per parameter ratio">
+              <img src="static/images/blt_entropy_1e20_results_compression_3d_global_parameters.gif" alt="3D IsoFLOP surface showing optimal bytes per parameter ratio">
               <figcaption>Bowl-shaped IsoFLOP surface shows that the lowest loss for each compression rate is achieved at the same bytes-per-parameter ratio.</figcaption>
             </figure>
           </div>
 
 
           <!-- ── Interactive Plotly embed ──────────────── -->
-          <iframe class="interactive-frame" src="static/images/blt_entropy_1e20_results_compression_3d.html" loading="lazy"></iframe>
+          <iframe class="interactive-frame" src="static/images/blt_entropy_1e20_results_compression_3d_global_parameters.html" loading="lazy"></iframe>
 
 
           <!-- ── Section heading ──────────────────────── -->
@@ -167,14 +176,44 @@
           <!-- ── Interactive Plotly embed ──────────────── -->
           <iframe class="interactive-frame" src="static/images/blt_entropy_optimal_configs_loss.html" loading="lazy"></iframe>
 
-
+          <!-- ── Single image ─────────────────────────── -->
+          <div class="is-flex is-horizontal-center">
+            <figure class="image">
+              <img src="static/images/blt_entropy_loss_profile.png" alt="Scaling law fit">
+              <figcaption>Power law estimating loss given compression rate and compute. The optimla compression slowly decrease for higher compute budgets.</figcaption>
+            </figure>
+          </div>
 
           <!-- ── Section heading ──────────────────────── -->
-          <h4>Beyond English [TODO] </h4>
+          <h4>Beyond English</h4>
 
           <!-- ── Paragraph ────────────────────────────── -->
-          <p>The optimal bytes-to-parameter ratio and compression rate vary across different languages.
-            Both are correlated with the average information value of bytes in a given language (measured by entropy).</p>
+            <p>The optimal bytes-to-parameter ratio and compression rate vary across different languages.
+              Both are correlated with the average information value of bytes in a given language (Parity).</p>
+
+            <!-- ── Three images side by side ────────────── -->
+            <div class="is-flex is-horizontal-center" style="gap: 1rem;">
+              <figure class="image">
+                <img src="static/images/blt_entropy_fra_Latn_1e20_results_compression_3d_global_parameters_fra_Latn.gif" alt="French compression plot">
+                <figcaption>French</figcaption>
+              </figure>
+              <figure class="image">
+                <img src="static/images/blt_entropy_arb_Arab_1e20_results_compression_3d_global_parameters_arb_Arab.gif" alt="Arabic compression plot">
+                <figcaption>Arabic</figcaption>
+              </figure>
+              <figure class="image">
+                <img src="static/images/blt_entropy_hin_Deva_1e20_results_compression_3d_global_parameters_hin_Deva.gif" alt="Hindi compression plot">
+                <figcaption>Hindi</figcaption>
+              </figure>
+            </div>
+
+          <!-- ── Single image ─────────────────────────── -->
+          <div class="is-flex is-horizontal-center">
+            <figure class="image">
+              <img src="static/images/tokenization_compression_vs_optimal.png" alt="Optimal compression vs. compression of BPE tokrnizers">
+              <figcaption>The optimal compression rate varies across languages and differs from compression of popular BPE tokenizers.</figcaption>
+            </figure>
+          </div>
 
         </div>
       </div>
