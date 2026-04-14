@@ -44,7 +44,7 @@ body {
   object-fit: fit;
 }
 
-.publication-header .hero-body {  
+.publication-header .hero-body {
 }
 
 .publication-title {
@@ -254,13 +254,14 @@ figure {
   margin: 1rem 0;
 }
 figure img {
-  max-width: 500px;
+  max-width: 640px;
 }
 section.section {
   padding-top: 0 !important;
 }
-.content h4 {
-  margin: 1.5rem 0 0.5rem 0;
+.content h3 {
+  margin: 2rem 0 0.75rem 0;
+  font-size: 1.4rem;
 }
 
 /* Compute Optimal Tokenization additions */
@@ -270,6 +271,7 @@ section.section {
   padding: 1.2em 1.5em;
   margin: 1.5rem 0;
   border-radius: 0 6px 6px 0;
+  line-height: 1.7;
 }
 .finding-box .label-text {
   font-size: 0.75rem;
@@ -278,6 +280,43 @@ section.section {
   letter-spacing: 0.06em;
   color: hsl(204, 86%, 53%);
   margin-bottom: 0.4em;
+}
+.finding-box ul {
+  padding-left: 1.2em;
+}
+.finding-box li {
+  margin-bottom: 0.25em;
+}
+hr.section-divider {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 2.5rem 0;
+}
+.interactive-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+  font-style: italic;
+}
+.interactive-label .icon {
+  color: hsl(204, 86%, 53%);
+  font-size: 0.9rem;
+}
+.lang-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.lang-grid figure {
+  margin: 0;
+}
+.lang-grid figcaption {
+  text-align: center;
+  font-weight: 600;
 }
 .equation-block {
   margin: 1.2rem 0;
