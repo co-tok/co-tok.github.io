@@ -132,7 +132,7 @@
           <h3>Scaling Laws and Data Compression</h3>
 
           <p>We train language models for fixed compute budgets, sweeping over compression rate, data amount, and parameter count.
-            For each configuration, we compute the number of bytes per parameter and plot the resulting loss.</p>
+            For each configuration, we compute the bytes-per-parameter ratio.</p>
 
           <div class="is-flex is-horizontal-center">
             <figure class="image">
@@ -155,11 +155,10 @@
           <!-- ── Finding 1 ────────────────────────────── -->
           <h3><b>[F1]</b> Optimal Data to Model Size</h3>
 
-          <div class="finding-box">
-            <div class="label-text">Finding 1</div>
-            The optimal ratio between bytes of data and model parameters is approximately constant across varying compute budgets and compression rates.
-            Therefore, when generalizing a scaling recipe to a model with a different tokenizer, we advise matching the ratio of training bytes (not tokens) to model parameters.
-          </div>
+          <p>
+            For a fixed compute budget (1e20 FLOPs), we plot loss against compression rate and bytes-per-parameter ratio.
+            This yields a 3D IsoFLOP:
+          </p>
 
           <div class="is-flex is-horizontal-center">
             <figure class="image">
@@ -174,6 +173,12 @@
           </div>
           <iframe class="interactive-frame" src="static/images/blt_entropy_1e20_results_compression_3d_global_parameters_new.html" loading="lazy"></iframe>
 
+          <div class="finding-box">
+            <div class="label-text">Finding 1</div>
+            The optimal ratio between bytes of data and model parameters is approximately constant across varying compute budgets and compression rates.
+            Therefore, when generalizing a scaling recipe to a model with a different tokenizer, we advise matching the ratio of training bytes (not tokens) to model parameters.
+          </div>
+
           <p>With the data-to-parameter ratio pinned down, a natural follow-up: what compression rate should we target?</p>
 
           <hr class="section-divider">
@@ -183,11 +188,10 @@
           <!-- ── Finding 2 ────────────────────────────── -->
           <h3><b>[F2]</b> Optimal Compression Rate</h3>
 
-          <div class="finding-box">
-            <div class="label-text">Finding 2</div>
-            The model's loss is minimized at the optimal compression rate. Deviating from this optimum in either direction increases loss.
-            We observe a slight decrease in the optimal compression rate for higher training budgets.
-          </div>
+          <p>
+            For each compute budget (from 5e18 to 2e21), we gather the optimal points (triangles/diamonds) from <b>[F1]</b>.
+            This lets us see how loss changes with compression across compute budgets:
+          </p>
 
           <div class="is-flex is-horizontal-center">
             <figure class="image">
@@ -211,6 +215,12 @@
             </figure>
           </div>
 
+          <div class="finding-box">
+            <div class="label-text">Finding 2</div>
+            The model's loss is minimized at the optimal compression rate. Deviating from this optimum in either direction increases loss.
+            We observe a slight decrease in the optimal compression rate for higher training budgets.
+          </div>
+
           <p>These findings hold for English, but do they generalize across languages?</p>
 
           <hr class="section-divider">
@@ -218,11 +228,10 @@
           <!-- ── Finding 3 ────────────────────────────── -->
           <h3><b>[F3]</b> Beyond English</h3>
 
-          <div class="finding-box">
-            <div class="label-text">Finding 3</div>
-            The optimal bytes-to-parameter ratio and compression rate vary across different languages.
-            Both are correlated with the average information value of bytes in a given language (Parity).
-          </div>
+          <p>
+            We run the same experiments on non-English data (training on each language separately) to see if these findings hold.
+            The IsoFLOP analysis allows us to find optimal bytes-per-parameter ratios and compression rates for each language:
+          </p>
 
           <div class="is-flex is-horizontal-center" style="gap: 1rem;">
             <figure class="image">
@@ -252,6 +261,12 @@
               <img src="static/images/tokenization_compression_vs_optimal.png" alt="Optimal compression vs. compression of BPE tokenizers">
               <figcaption>The optimal compression rate varies across languages and differs from compression of popular BPE tokenizers.</figcaption>
             </figure>
+          </div>
+
+          <div class="finding-box">
+            <div class="label-text">Finding 3</div>
+            The optimal bytes-to-parameter ratio and compression rate vary across different languages.
+            Both are correlated with the average information value of bytes in a given language (Parity).
           </div>
 
         </div>
