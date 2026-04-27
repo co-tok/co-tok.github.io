@@ -217,8 +217,8 @@
 
           <div class="finding-box">
             <div class="label-text">Finding 2</div>
-            The model's loss is minimized at the optimal compression rate. Deviating from this optimum in either direction increases loss.
-            We observe a slight decrease in the optimal compression rate for higher training budgets.
+            At each training compute budget, there is an optimal compression rate that minimizes loss.
+            The optimal compression rate decreases slowly as train budget increases.
           </div>
 
           <p>These findings hold for English, but do they generalize across languages?</p>
@@ -257,6 +257,10 @@
           <p>How the optimal compression rates compare with common tokenizers: </p>
 
           <div class="is-flex is-horizontal-center">
+            <figure class="image">
+              <img src="static/images/multilingual_compression_rate.png" alt="Russian compression plot">
+              <figcaption>The optimal compression is correlated with parity, which measures information value of bytes.</figcaption>
+            </figure>
             <figure class="image">
               <img src="static/images/tokenization_compression_vs_optimal.png" alt="Optimal compression vs. compression of BPE tokenizers">
               <figcaption>The optimal compression rate varies across languages and differs from compression of popular BPE tokenizers.</figcaption>
