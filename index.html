@@ -60,12 +60,12 @@
       <div class="columns is-centered">
         <div class="column has-text-centered">
           <div class="publication-links">
-            <!-- <span class="link-block">
-              <a href="#" class="external-link button is-normal is-rounded is-dark">
+            <span class="link-block">
+              <a href="paper.pdf" class="external-link button is-normal is-rounded is-dark">
                 <span class="icon"><i class="fas fa-file-pdf"></i></span>
                 <span>Paper</span>
               </a>
-            </span> -->
+            </span>
             <!-- <span class="link-block">
               <a href="#" class="external-link button is-normal is-rounded is-dark">
                 <span class="icon"><i class="ai ai-arxiv"></i></span>
@@ -95,7 +95,7 @@
           We study the impact of data compression on scaling laws. We find that:
           <ul style="margin-top: 0.5em; margin-bottom: 0;">
             <li><b>[F1]</b> In compute-optimal scaling, bytes (not tokens) of data increase proportionally to parameter count.</li>
-            <li><b>[F2]</b> For each training budget, the lowest loss is obtained at the optimal compression rate.</li>
+            <li><b>[F2]</b> At each training budget, there is an optimal compression rate, and this value decreases at larger scales.</li>
             <li><b>[F3]</b> The optimal compression rate varies across languages and differs from the compression rate of popular BPE tokenizers.</li>
           </ul>
         </div>
@@ -112,14 +112,23 @@
         <div class="content is-size-5">
           <p class="is-size-5">
             Tokenization determines how raw text is compressed into discrete tokens for language model training.
-            Most scaling law research fixes the tokenizer and varies only model size and data amount, but what happens when we can control the tokenizer's <em>compression rate</em>?
-            We systematically study this question, sweeping over compression rate, model size, and data amount in scaling laws.
+            Most scaling law research fixes the tokenizer and varies only model size and data amount, but what happens when we can control the tokenizer's <em>compression rate</em> (bytes/token)?
+            <!-- We systematically study this question, sweeping over compression rate, model size, and data amount in scaling laws. -->
+          </p>
+           <p>
+            We train language models at fixed compute budgets.
+            We sweep over compression rate and model size, which together determine the amount of training data under a fixed budget and the corresponding bytes per parameter ratio.
+            The relationship between compression, bytes per parameter ratio and loss is the most interesting here.
+           </p>
+           <p>
+            Now, let's dive in...
           </p>
         </div>
       </div>
     </div>
   </div>
 </section>
+
 
 <!-- ─── CONTENT ─────────────────────────────────────────── -->
 <section class="section">
@@ -129,49 +138,55 @@
         <div class="content is-size-5">
 
           <!-- ── Section heading ──────────────────────── -->
-          <h3>Scaling Laws and Data Compression</h3>
+          <!-- <h3>Scaling Laws and Data Compression</h3>
 
-          <p>We train language models for fixed compute budgets, sweeping over compression rate, data amount, and parameter count.
-            For each configuration, we compute the bytes-per-parameter ratio.</p>
+          <p>We train language models for fixed compute budgets, e.g. 10e20 FLOPs.
+            We sweep over compression rate, and model size, which determine amount of training data under fixed budget and corresponding bytes per paramter ratio.
+            The relation between compression, bytes per parameter ratio and loss is the most interesting.
+            Let's see how it looks:</p> -->
 
-          <div class="is-flex is-horizontal-center">
+          <!-- <div class="is-flex is-horizontal-center">
             <figure class="image">
               <img src="static/images/blt_entropy_1e20_results_experimental_grid_global_parameters.png" alt="Grid of compression aware experiments">
               <figcaption>Value of compression rate T (x-axis) and model size N (y-axis) determine the amount of training data B (color) and the bytes per parameter ratio (values in squares).</figcaption>
             </figure>
-          </div>
+          </div> -->
 
-          <p>Let's check how these configurations perform:</p>
-
-          <div class="is-flex is-horizontal-center">
+          <!-- <div class="is-flex is-horizontal-center">
             <figure class="image">
               <img src="static/images/blt_entropy_1e20_results_global_parameters_gradual.gif" alt="IsoFLOP curves showing bytes per parameter vs validation loss">
               <figcaption>Plotting IsoFLOPs: Loss vs. bytes per parameter for each compression rate.</figcaption>
             </figure>
-          </div>
+          </div> -->
 
-          <hr class="section-divider">
+          <!-- <hr class="section-divider"> -->
 
           <!-- ── Finding 1 ────────────────────────────── -->
           <h3><b>[F1]</b> Optimal Data to Model Size</h3>
 
           <p>
-            For a fixed compute budget (1e20 FLOPs), we plot loss against compression rate and bytes-per-parameter ratio.
+            For a fixed compute budget (1e20 FLOPs), we plot loss against compression rate and bytes per parameter ratio.
             This yields a 3D IsoFLOP:
           </p>
 
           <div class="is-flex is-horizontal-center">
             <figure class="image">
               <img src="static/images/blt_entropy_1e20_results_compression_3d_global_parameters.gif" alt="3D IsoFLOP surface showing optimal bytes per parameter ratio">
-              <figcaption>Bowl-shaped IsoFLOP surface shows that the lowest loss for each compression rate is achieved at the same bytes-per-parameter ratio.</figcaption>
+              <figcaption>The bowl-shaped IsoFLOP surface shows that, for every compression rate, the lowest loss is achieved at roughly the same bytes per parameter ratio (triangles).</figcaption>
             </figure>
           </div>
 
+          <!-- <p>
+            <span class="icon"><i class="fas fa-hand-pointer"></i></span>
+            Interactive version of the plot above. You can rotate it and hover over points to check loss, compression, and byte per parameter values:
+          </p> -->
           <div class="interactive-label">
             <span class="icon"><i class="fas fa-hand-pointer"></i></span>
-            Interact with the 3D surface plot &mdash; drag to rotate, scroll to zoom.
+            Interactive version of the plot above. You can rotate it and hover over points to check loss, compression, and bytes per parameter values:
           </div>
           <iframe class="interactive-frame" src="static/images/blt_entropy_1e20_results_compression_3d_global_parameters_new.html" loading="lazy"></iframe>
+
+          <p>We observe that the optimal bytes per parameter ratio remains nearly constant across different compression rates.</p>
 
           <div class="finding-box">
             <div class="label-text">Finding 1</div>
@@ -181,7 +196,7 @@
 
           <p>With the data-to-parameter ratio pinned down, a natural follow-up: what compression rate should we target?</p>
 
-          <hr class="section-divider">
+          <!-- <hr class="section-divider"> -->
 
 
 
@@ -189,48 +204,54 @@
           <h3><b>[F2]</b> Optimal Compression Rate</h3>
 
           <p>
-            For each compute budget (from 5e18 to 2e21), we gather the optimal points (triangles/diamonds) from <b>[F1]</b>.
+            For each compute budget (from 5e18 to 2e21 FLOPs), we gather the optimal points (triangles) from <b>[F1]</b>.
             This lets us see how loss changes with compression across compute budgets:
           </p>
 
           <div class="is-flex is-horizontal-center">
             <figure class="image">
               <img src="static/images/blt_entropy_optimal_configs_loss.gif" alt="Loss profile across compression rates for increasing compute budgets">
-              <figcaption>U-shaped loss profile for increasing compute budgets. For best results, models should be trained with a compression rate close to the optimum.</figcaption>
+              <figcaption>U-shaped loss profiles across increasing compute budgets. For best results, models should be trained at a compression rate close to the optimum.</figcaption>
             </figure>
           </div>
-
+<!--
+          <p>
+            <span class="icon"><i class="fas fa-hand-pointer"></i></span>
+            Interactive version of the plot above. You can rotate it and hover over points to check loss, compression, and compute budget:
+          </p> -->
           <div class="interactive-label">
             <span class="icon"><i class="fas fa-hand-pointer"></i></span>
-            Interact with the loss profile plot &mdash; hover for details.
+            Interactive version of the plot above. You can rotate it and hover over points to check loss, compression, and compute budget:
           </div>
           <iframe class="interactive-frame" src="static/images/blt_entropy_optimal_configs_loss.html" loading="lazy"></iframe>
 
-          <p>We can fit a power law to model the relationship between compression rate, compute, and loss (for details, check the paper): </p>
+          <p>We fit a power law to model the relationship between compression rate, compute, and loss (for details, see the <a href="paper.pdf">paper</a>):</p>
 
           <div class="is-flex is-horizontal-center">
             <figure class="image">
               <img src="static/images/blt_entropy_loss_profile.png" alt="Scaling law fit">
-              <figcaption>Power law estimating loss given compression rate and compute. The optimal compression rate slowly decreases for higher compute budgets.</figcaption>
+              <figcaption>Power law estimating loss given compression rate and compute budget.</figcaption>
             </figure>
           </div>
+
+          <p>We see that the optimal compression rate decreases for higher compute budgets.</p>
 
           <div class="finding-box">
             <div class="label-text">Finding 2</div>
             At each training compute budget, there is an optimal compression rate that minimizes loss.
-            The optimal compression rate decreases slowly as train budget increases.
+            The optimal compression rate decreases as the training budget increases.
           </div>
 
           <p>These findings hold for English, but do they generalize across languages?</p>
 
-          <hr class="section-divider">
+          <!-- <hr class="section-divider"> -->
 
           <!-- ── Finding 3 ────────────────────────────── -->
           <h3><b>[F3]</b> Beyond English</h3>
 
           <p>
-            We run the same experiments on non-English data (training on each language separately) to see if these findings hold.
-            The IsoFLOP analysis allows us to find optimal bytes-per-parameter ratios and compression rates for each language:
+            We run the same experiments on non-English data (training on each language separately) to see whether these findings still hold.
+            The IsoFLOP analysis (as in <b>[F1]</b>) lets us find the optimal bytes per parameter ratio and compression rate for each language:
           </p>
 
           <div class="is-flex is-horizontal-center" style="gap: 1rem;">
@@ -254,24 +275,38 @@
             </figure>
           </div>
 
-          <p>How the optimal compression rates compare with common tokenizers: </p>
+          <p>
+            Across languages, the IsoFLOP "bowls" are shifted along the compression-rate axis, meaning that the optimal compression rate depends on the language.
+            Below, we compare these optima against <abbr id="parity-ref" title="The ratio of byte length needed to express the same content in a given language versus English." style="text-decoration: none; border-bottom: 1px dotted #888; cursor: help;">Parity</abbr><sup><a href="#parity-footnote" style="text-decoration: none;">∗</a></sup> and the compression rates of popular BPE tokenizers:
+          </p>
 
-          <div class="is-flex is-horizontal-center">
-            <figure class="image">
-              <img src="static/images/multilingual_compression_rate.png" alt="Russian compression plot">
-              <figcaption>The optimal compression is correlated with parity, which measures information value of bytes.</figcaption>
+
+          <div class="is-flex is-horizontal-center" style="gap: 1rem; align-items: flex-end;">
+            <figure class="image" style="flex: 1; margin: 0;">
+              <img src="static/images/multilingual_compression_rate.png" alt="Russian compression plot" style="width: 100%; height: auto;">
+              <figcaption>The optimal compression is correlated with Parity.</figcaption>
             </figure>
-            <figure class="image">
-              <img src="static/images/tokenization_compression_vs_optimal.png" alt="Optimal compression vs. compression of BPE tokenizers">
-              <figcaption>The optimal compression rate varies across languages and differs from compression of popular BPE tokenizers.</figcaption>
+            <figure class="image" style="flex: 1; margin: 0;">
+              <img src="static/images/tokenization_compression_vs_optimal.png" alt="Optimal compression vs. compression of BPE tokenizers" style="width: 100%; height: auto;">
+              <figcaption>The optimal compression rate differs from compression of popular BPE tokenizers.</figcaption>
             </figure>
           </div>
+
+          We observe relation between optimal compression rate and Parity shoing that sparsly encoded languages benefit from higher compression.
+
 
           <div class="finding-box">
             <div class="label-text">Finding 3</div>
             The optimal bytes-to-parameter ratio and compression rate vary across different languages.
-            Both are correlated with the average information value of bytes in a given language (Parity).
+            Both are correlated with Parity
           </div>
+
+
+          <p id="parity-footnote" style="font-size: 0.9em; color: #555;">
+            <sup>∗</sup> <b>Parity</b> is the ratio of byte length needed to express the same content in a given language versus English.
+            E.g.: a sentence translated to Russian will be encoded by ~2× more bytes than its English version.
+            <a href="#parity-ref" style="text-decoration: none;" aria-label="Back to text">↩</a>
+          </p>
 
         </div>
       </div>
@@ -286,7 +321,7 @@
       <div class="column is-four-fifths">
         <div class="content">
           <h2 class="title">BibTeX</h2>
-          <pre><code>@article{limisiewicz2026compute,
+          <pre><code>@article{limisiewicz2026cotok,
   title={Compute Optimal Tokenization},
   author={Limisiewicz, Tomasz and Pagnoni, Artidoro and Iyer, Srini and Lewis, Mike and Mehta, Sachin and Liu, Alisa and Li, Margaret and Ghosh, Gargi and Zettlemoyer, Luke},
   year={2026}
